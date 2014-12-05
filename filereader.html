@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        // add event listener for change - list out this.files
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('input[type="file"]').addEventListener('change', function () {
+                console.log(this.files);
+                var files = this.files;
+                console.log('Number of files: ' + files.length);
+                for (var i = 0, len = files.length; i < len; i++) {
+                    var file = files[i];
+                    console.log('Name: ', file.name, ', Type: ', file.type, ', Size: ', file.size);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="file" multiple/>
+</body>
+</html>
