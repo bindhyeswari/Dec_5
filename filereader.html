@@ -3,6 +3,11 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <style>
+        img {
+            display: block;
+        }
+    </style>
     <script>
         // add event listener for change - list out this.files
         document.addEventListener('DOMContentLoaded', function () {
@@ -16,13 +21,15 @@
                     var file = files[i];
                     console.log('Name: ', file.name, ', Type: ', file.type, ', Size: ', file.size);
 
-                    var div_container = createDisplay(div_uploads);
-                    var filereader = new FileReader();
-                    filereader.addEventListener('progress', function () {
 
+                    var filereader = new FileReader();
+                    filereader.dom_container = createDisplay(div_uploads);
+                    filereader.addEventListener('progress', function (e) {
+                        if (e.lengthComputable) this.dom_container.firstElementChild.value = e.loaded / e.total * 100;
                     });
                     filereader.addEventListener('loadend', function () {
                         datauris.push(this.result);
+                        this.dom_container.lastElementChild.src = this.result;
                     });
                     filereader.readAsDataURL(file);
                 }
@@ -39,7 +46,7 @@
                 });
 
                 // create an image element
-                var img = document.createElement('img', '', '', div_file);
+                var img = createElement('img', '', '', div_file);
                 return div_file;
             }
 
@@ -53,6 +60,7 @@
                         element.setAttribute(prop, attrs[prop]);
                     }
                 }
+                return element;
             }
         });
     </script>
@@ -69,10 +77,7 @@
     <input type="file" multiple/>
 
     <div id="uploads">
-        <div class="file">
-            <progress></progress>
-            <img src="" alt=""/>
-        </div>
+
     </div>
 
 
