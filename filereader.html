@@ -9,16 +9,72 @@
             document.querySelector('input[type="file"]').addEventListener('change', function () {
                 console.log(this.files);
                 var files = this.files;
+                var datauris = [];
+                var div_uploads = document.getElementById('uploads');
                 console.log('Number of files: ' + files.length);
                 for (var i = 0, len = files.length; i < len; i++) {
                     var file = files[i];
                     console.log('Name: ', file.name, ', Type: ', file.type, ', Size: ', file.size);
+
+                    var div_container = createDisplay(div_uploads);
+                    var filereader = new FileReader();
+                    filereader.addEventListener('progress', function () {
+
+                    });
+                    filereader.addEventListener('loadend', function () {
+                        datauris.push(this.result);
+                    });
+                    filereader.readAsDataURL(file);
                 }
             });
+
+            function createDisplay(parent) {
+                // create a div with the class file
+                var div_file = createElement('div', '', 'file', parent);
+
+                // create a progress bar
+                var progress = createElement('progress', '', '', div_file, {
+                    max: 100,
+                    value: 0
+                });
+
+                // create an image element
+                var img = document.createElement('img', '', '', div_file);
+                return div_file;
+            }
+
+            function createElement(type, innerHTML, className, parent, attrs) {
+                var element = document.createElement(type);
+                element.innerHTML = innerHTML;
+                element.className = className;
+                if (typeof parent !== 'undefined') parent.appendChild(element);
+                if (typeof attrs !== 'undefined') {
+                    for (var prop in attrs) {
+                        element.setAttribute(prop, attrs[prop]);
+                    }
+                }
+            }
         });
     </script>
 </head>
 <body>
+
+    To convert to base64, use the following command
+    <div>
+        <code>
+            openssl base64 -in che.jpg -out che.txt
+        </code>
+    </div>
+
     <input type="file" multiple/>
+
+    <div id="uploads">
+        <div class="file">
+            <progress></progress>
+            <img src="" alt=""/>
+        </div>
+    </div>
+
+
 </body>
 </html>
